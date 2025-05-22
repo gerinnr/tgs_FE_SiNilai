@@ -7,55 +7,227 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## 📘 Panduan Membuat Project Frontend Laravel Menggunakan Quick App di Laragon
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Laravel Frontend Project 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+PPanduan ini menjelaskan langkah-langkah membuat proyek frontend Laravel menggunakan fitur <b>Quick App</b> di Laragon. Fokusnya adalah dari proses kloning backend, membuat frontend, membuka proyek di VS Code, hingga menampilkan halaman dari controller ke blade view.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Persyaratan
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Laragon sudah terinstall
+- Composer
+- Git
+- Backend & database sudah tersedia (via API & MySQL)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
+## 🚀 Langkah Clone Backend via Terminal VSCODE
 
-## Laravel Sponsors
+1. Clone Repository Backend
+    ```
+    git clone https://github.com/username/nama-project-backend.git backend
+    ```
+2. Masuk ke folder backend dengan perintah
+    ```
+    cd backend
+    ```
+3. Install Dependency dengan Composer
+    ```
+    composer install
+    ```
+4. Salin File .env dan Generate App Key
+    ```
+    cp .env.example .env
+    ```
+5. Jalankan Server Lokal
+    ```
+    php spark serve
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    ```
 
-### Premium Partners
+## 🚀 Langkah Setup Frontend Laravel
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 1. Buat Project Laravel dari Laragon QuickApp
 
-## Contributing
+1. Buka **Laragon**
+2. Klik kanan icon tray → **Quick app** → **Laravel**
+3. Masukkan nama project, contoh: `FEsinilai`
+4. Tunggu hingga proses selesai, Laragon akan membuat folder di `C:\laragon\www\frontend-laravel`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 2. Masuk ke Folder Project
 
-## Code of Conduct
+```bash
+cd C:\laragon\www\frontend-laravel
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Salin & Edit File `.env`
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Ubah konfigurasi database agar sesuai dengan database backend teman:
 
-## License
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sinilai2
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+> Pastikan database backend sudah berjalan dan tersedia.
+
+### 4. Install Dependensi 
+
+```
+composer install
+```
+
+### 5. Jalankan Laravel
+
+```bash
+php artisan serve
+```
+
+---
+
+## 🔗 Hubungkan ke Backend Teman (API)
+
+1. Pastikan backend teman sudah aktif dan memiliki endpoint API, misalnya: `http://localhost:8080/kelas`.
+2. Tambahkan di `.env` frontend:
+
+```env
+API_URL=http://localhost:8080
+```
+
+3. Contoh penggunaan di Controller:
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class KelasController extends Controller
+{
+    public function index()
+    {
+        $response = Http::get('http://localhost:8080/kelas');
+        if ($response->successful()) {
+            $kelas = $response->json();
+            return view('dataKls', ['kelas' => $kelas]);
+        }
+        return view('dataKls', ['kelas' => [], 'error' => 'Gagal mengambil data kelas']);
+    }
+}
+```
+
+---
+
+
+# Langkah Membuat Isi File di Project Laravel Frontend
+
+Berikut ini adalah langkah-langkah membuat file dan isi dasar di dalam project Laravel frontend, agar bisa menampilkan data dari backend (API teman).
+
+---
+
+
+## 1. Tambahkan Route di `routes/web.php`
+
+```php
+<?php
+
+use App\Controllers\Kelas;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProdiController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\KelasController;
+
+
+Route::get('/', function () {
+    return view('homepage');
+});
+
+Route::resource('prodi', ProdiController::class);
+
+Route::resource('kelas', KelasController::class);
+
+Route::resource('mahasiswa', MahasiswaController::class);
+
+```
+
+---
+
+## 2. Buat Controller
+
+```bash
+php artisan make:controller KelasController
+```
+
+### Isi `app/Http/Controllers/KelasController.php`:
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class KelasController extends Controller
+{
+    public function index()
+    {
+        $response = Http::get('http://localhost:8080/kelas');
+        if ($response->successful()) {
+            $kelas = $response->json();
+            return view('dataKls', ['kelas' => $kelas]);
+        }
+        return view('dataKls', ['kelas' => [], 'error' => 'Gagal mengambil data kelas']);
+    }
+}
+```
+
+---
+
+## 3. Edit View di `resources/views/welcome.blade.php`
+
+```blade
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend Laravel</title>
+</head>
+<body>
+    <h1>Data dari Backend:</h1>
+
+    <ul>
+        @foreach ($data as $item)
+            <li>{{ $item['nama'] }}</li>
+        @endforeach
+    </ul>
+</body>
+</html>
+```
+
+> Ganti `nama` sesuai field yang dikembalikan dari API backend.
+
+---
+
+
+## 5. Jalankan Project
+
+```bash
+php artisan serve
+```
+
+---
+
+✅ Sekarang project frontend siap menampilkan data dari backend teman.

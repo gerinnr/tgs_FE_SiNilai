@@ -42,25 +42,22 @@ class KelasController extends Controller
         return redirect()->route('kelas.index')->with('success', 'Dosen berhasil ditambahkan!');
     }
 
-  public function edit($kode_kelas)
-{
-    $response = Http::get("http://localhost:8080/kelas/{$kode_kelas}");
+    public function edit($kode_kelas)
+    {
+            $response = Http::get("http://localhost:8080/kelas/{$kode_kelas}");
 
     if ($response->successful()) {
-        $json = $response->json();
+        $kelas = $response->json()[0]; // langsung dapat objek kelas, tanpa ['data']
 
-        // Pastikan data kelas ada di dalam key 'data'
-        if (isset($json['data'])) {
-            $kelas = $json['data'];
-        } else {
-            return redirect()->route('kelas.index')->withErrors(['msg' => 'Format data tidak sesuai']);
+        if (!$kelas) {
+            return redirect()->route('kelas.index')->withErrors(['msg' => 'Data kelas kosong']);
         }
 
         return view('editKls', compact('kelas'));
     }
 
     return redirect()->route('kelas.index')->withErrors(['msg' => 'Gagal mengambil data kelas']);
-}
+    }
 
 
     public function update(Request $request, $kode_kelas)
@@ -97,3 +94,4 @@ class KelasController extends Controller
         return redirect()->route('kelas.index')->with('success', $result['messages']['success'] ?? 'Data berhasil dihapus');
     }
 }
+?>
