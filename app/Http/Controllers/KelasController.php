@@ -94,4 +94,3 @@ class KelasController extends Controller
         return redirect()->route('kelas.index')->with('success', $result['messages']['success'] ?? 'Data berhasil dihapus');
     }
 }
-?>

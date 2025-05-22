@@ -123,9 +123,9 @@
 
   <!-- Script Pagination -->
   <script>
-    const rowsPerPage = 5;
+    const rowsPerPage = 9;
     let currentPage = 1;
-    const table = document.querySelector("#mahasiswaTableBody");
+    const table = document.querySelector("#kelasTableBody");
     const rows = [...table.querySelectorAll("tr")];
     const searchInput = document.querySelector('input[name="search"]');
     const paginationContainer = document.getElementById("pagination");

@@ -7,16 +7,15 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# Laravel Frontend Project
+
 ## 📘 Panduan Membuat Project Frontend Laravel Menggunakan Quick App di Laragon
 
-# Laravel Frontend Project 
-
-PPanduan ini menjelaskan langkah-langkah membuat proyek frontend Laravel menggunakan fitur <b>Quick App</b> di Laragon. Fokusnya adalah dari proses kloning backend, membuat frontend, membuka proyek di VS Code, hingga menampilkan halaman dari controller ke blade view.
-
+Panduan ini menjelaskan langkah-langkah membuat proyek frontend Laravel menggunakan fitur <b>Quick App</b> di Laragon. Fokusnya adalah dari proses kloning backend, membuat frontend, membuka proyek di VS Code, hingga menampilkan halaman dari controller ke blade view.
 
 ---
 
-## 🛠️ Persyaratan
+### 🛠️ Persyaratan
 
 - Laragon sudah terinstall
 - Composer
@@ -24,7 +23,7 @@ PPanduan ini menjelaskan langkah-langkah membuat proyek frontend Laravel menggun
 - Backend & database sudah tersedia (via API & MySQL)
 
 ---
-## 🚀 Langkah Clone Backend via Terminal VSCODE
+## 1. 🚀 Langkah Clone Backend via Terminal VSCODE
 
 1. Clone Repository Backend
     ```
@@ -47,20 +46,31 @@ PPanduan ini menjelaskan langkah-langkah membuat proyek frontend Laravel menggun
     php spark serve
 
     ```
-
-## 🚀 Langkah Setup Frontend Laravel
+---  
+## 2. 🚀 Langkah Import Database
+1. Download database melalui git berikut (file jenis sql)
+```
+https://github.com/HanaKurnia/database_pbf
+```
+2. Buka phpMyAdmin dari menu Laragon, kemudian klik database
+3. Buat database baru, misalnya: sinilai2
+4. Klik tab Import, lalu pilih file .sql dari backend-mu
+5. Klik Go untuk import
+---
+   
+## 3. 🚀 Langkah Setup Frontend Laravel
 
 ### 1. Buat Project Laravel dari Laragon QuickApp
 
 1. Buka **Laragon**
 2. Klik kanan icon tray → **Quick app** → **Laravel**
 3. Masukkan nama project, contoh: `FEsinilai`
-4. Tunggu hingga proses selesai, Laragon akan membuat folder di `C:\laragon\www\frontend-laravel`
+4. Tunggu hingga proses selesai, Laragon akan membuat folder di `C:\laragon\www\FEsinilai`
 
 ### 2. Masuk ke Folder Project
 
 ```bash
-cd C:\laragon\www\frontend-laravel
+cd C:\laragon\www\FEsinilai
 ```
 
 ### 3. Salin & Edit File `.env`
@@ -93,53 +103,11 @@ composer install
 ```bash
 php artisan serve
 ```
-
 ---
 
-## 🔗 Hubungkan ke Backend Teman (API)
+## 4. 🚀 Langkah Membuat Isi File di Project Laravel Frontend
 
-1. Pastikan backend teman sudah aktif dan memiliki endpoint API, misalnya: `http://localhost:8080/kelas`.
-2. Tambahkan di `.env` frontend:
-
-```env
-API_URL=http://localhost:8080
-```
-
-3. Contoh penggunaan di Controller:
-
-```php
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-
-class KelasController extends Controller
-{
-    public function index()
-    {
-        $response = Http::get('http://localhost:8080/kelas');
-        if ($response->successful()) {
-            $kelas = $response->json();
-            return view('dataKls', ['kelas' => $kelas]);
-        }
-        return view('dataKls', ['kelas' => [], 'error' => 'Gagal mengambil data kelas']);
-    }
-}
-```
-
----
-
-
-# Langkah Membuat Isi File di Project Laravel Frontend
-
-Berikut ini adalah langkah-langkah membuat file dan isi dasar di dalam project Laravel frontend, agar bisa menampilkan data dari backend (API teman).
-
----
-
-
-## 1. Tambahkan Route di `routes/web.php`
+### 1. Tambahkan Route di `routes/web.php`
 
 ```php
 <?php
@@ -163,14 +131,11 @@ Route::resource('mahasiswa', MahasiswaController::class);
 
 ```
 
----
-
-## 2. Buat Controller
+### 2. Buat Controller
 
 ```bash
 php artisan make:controller KelasController
 ```
-
 ### Isi `app/Http/Controllers/KelasController.php`:
 
 ```php
@@ -195,9 +160,10 @@ class KelasController extends Controller
 }
 ```
 
----
-
-## 3. Edit View di `resources/views/welcome.blade.php`
+### 3. Edit View di `resources/views/welcome.blade.php`
+```bash
+php artisan make:view DataKls
+```
 
 ```blade
 <!DOCTYPE html>
@@ -219,13 +185,11 @@ class KelasController extends Controller
 
 > Ganti `nama` sesuai field yang dikembalikan dari API backend.
 
----
 
-
-## 5. Jalankan Project
+### 4. Jalankan Project
 
 ```bash
-php artisan serve
+php artisan serve http://127.0.0.1:8000
 ```
 
 ---

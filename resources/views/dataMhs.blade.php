@@ -127,7 +127,7 @@
 
   <!-- Script Pagination -->
   <script>
-    const rowsPerPage = 5;
+    const rowsPerPage = 9;
     let currentPage = 1;
     const table = document.querySelector("#mahasiswaTableBody");
     const rows = [...table.querySelectorAll("tr")];

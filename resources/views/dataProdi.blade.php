@@ -83,12 +83,12 @@
             <thead>
               <tr class="bg-blue-200 text-gray-800 uppercase text-xs">
                 <th class="py-3 px-4 text-center border">No</th>
-                <th class="py-3 px-4 text-center border">Kode Kelas</th>
-                <th class="py-3 px-4 border">Nama Kelas</th>
+                <th class="py-3 px-4 text-center border">ID Prodi</th>
+                <th class="py-3 px-4 border">Nama Prodi</th>
                 <th class="py-3 px-4 text-center border">Aksi</th>
               </tr>
             </thead>
-            <tbody id="kelasTableBody">
+            <tbody id="prodiTableBody">
               @foreach ($prodi as $index => $p)
               <tr class="hover:bg-blue-50 border-b">
                 <td class="py-2 px-4 text-center">{{ $index + 1 }}</td>
@@ -123,9 +123,9 @@
 
   <!-- Script Pagination -->
   <script>
-    const rowsPerPage = 5;
+    const rowsPerPage = 9;
     let currentPage = 1;
-    const table = document.querySelector("#mahasiswaTableBody");
+    const table = document.querySelector("#prodiTableBody");
     const rows = [...table.querySelectorAll("tr")];
     const searchInput = document.querySelector('input[name="search"]');
     const paginationContainer = document.getElementById("pagination");
