@@ -56,25 +56,30 @@ class MahasiswaController extends Controller
         return redirect()->route('mahasiswa.index')->with('success', 'Data berhasil ditambahkan');
     }
 
-    public function edit()
-    {
-        $response = Http::get("http://localhost:8080/mahasiswa");
+    public function edit($npm)
+{
+    $response = Http::get("http://localhost:8080/mahasiswa");
 
-        if ($response->successful()) {
-            $mahasiswa = $response->json()[0];
+    if ($response->successful()) {
+        $mahasiswaList = $response->json();
 
-            if (!$mahasiswa) {
-                return redirect()->route('mahasiswa.index')->withErrors(['msg' => 'Data mahasiswa tidak ditemukan']);
-            }
+        // 🔍 Filter manual berdasarkan NPM
+        $mahasiswa = collect($mahasiswaList)->firstWhere('npm', $npm);
 
-            $kelas = Http::get("http://localhost:8080/kelas")->json();
-            $prodi = Http::get("http://localhost:8080/prodi")->json();
-
-            return view('editMhs', compact('mahasiswa', 'kelas', 'prodi'));
+        if (!$mahasiswa) {
+            return redirect()->route('mahasiswa.index')->withErrors(['msg' => 'Data mahasiswa tidak ditemukan']);
         }
 
-        return redirect()->route('mahasiswa.index')->withErrors(['msg' => 'Gagal mengambil data mahasiswa']);
+        // Ambil data kelas dan prodi
+        $kelas = Http::get("http://localhost:8080/kelas")->json();
+        $prodi = Http::get("http://localhost:8080/prodi")->json();
+
+        return view('editMhs', compact('mahasiswa', 'kelas', 'prodi'));
     }
+
+    return redirect()->route('mahasiswa.index')->withErrors(['msg' => 'Gagal mengambil data mahasiswa']);
+}
+
 
        public function update(Request $request, $npm)
 {
@@ -98,7 +103,6 @@ class MahasiswaController extends Controller
         return redirect()->back()->with('error', 'Gagal memperbarui data mahasiswa.');
     }
 }
-
 
     public function destroy($npm)
     {
