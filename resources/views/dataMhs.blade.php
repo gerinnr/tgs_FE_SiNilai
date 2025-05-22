@@ -70,6 +70,13 @@
               <button type="submit" class="bg-blue-600 text-white px-3 py-2 hover:bg-blue-700 text-sm">Cari</button>
             </form>
 
+            <!-- Cetak -->
+            <form action="{{ route('export.pdf') }}" method="GET">
+              <button type="submit" class="flex items-center gap-2 bg-gray-500 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-600 shadow-sm">
+                <i class="fas fa-print"></i> Cetak
+              </button>
+            </form>
+
             <!-- Tombol Tambah -->
             <a href="{{ route('mahasiswa.create') }}" class="bg-green-500 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 shadow-sm">
               <i class="fas fa-plus"></i> Tambah Data

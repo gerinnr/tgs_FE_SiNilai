@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MahasiswaController extends Controller
 {
@@ -109,5 +110,17 @@ class MahasiswaController extends Controller
         }
 
         return redirect()->route('mahasiswa.index')->with('success', $result['messages']['success'] ?? 'Data berhasil dihapus');
+    }
+
+    public function exportPdf()
+    {
+        $response = Http::get('http://localhost:8080/mahasiswa');
+        if ($response->successful()) {
+            $mahasiswa = collect($response->json());
+            $pdf = Pdf::loadView('pdf.cetak', compact('mahasiswa')); 
+            return $pdf->download('mahasiswa.pdf');
+        } else {
+            return back()->with('error', 'Gagal mengambil data untuk PDF');
+        }
     }
 }
